@@ -2,23 +2,33 @@ const express = require('express');
 const router = express.Router();
 const dummyData = require('../data/dummy');
 // Uncomment when switching to PostgreSQL
-// const db = require('../postgres');
+const db = require('../postgres');
 
 router.get('/login', (req, res) => {
   res.render('auth/login');
 });
 
-router.post('/login', (req, res) => {
-  const { username, password, type } = req.body;
-  const users = type === 'student' ? dummyData.students : dummyData.instructors;
-  const user = users.find(u => u.username === username && u.password === password);
-  
-  if (user) {
-    req.session.user = user;
-    res.redirect('/');
-  } else {
-    res.render('auth/login', { error: 'Invalid credentials' });
-  }
+router.post('/login', async (req, res) => {
+ // return new Promise((resolve, reject) => {    
+      const { username, password, type } = req.body;
+      //checkLogin
+      const user_details = { username: username, password: password };
+      //const users = type === 'student' ? dummyData.students : dummyData.instructors;
+      let user = null;
+      if (type === 'student') {
+        user = await db.checkLogin(user_details);
+      } else {
+        res.redirect('/');
+      }
+      
+      if (user) {
+        req.session.user = user;
+        res.redirect('/');
+      } else {
+        res.render('auth/login', { error: 'Invalid credentials' });
+      }
+    
+  // }); // promise end
 });
 
 router.get('/signup/:type', (req, res) => {

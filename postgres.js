@@ -1,13 +1,17 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'your_username',
-  host: 'localhost',
-  database: 'gym_connection',
-  password: 'your_password',
-  port: 5432,
+  user: 'avnadmin',
+  host: 'pg-2d98c6c2-aib-5b6c.j.aivencloud.com',
+  database: 'defaultdb',
+  password: 'AVNS_oczXQsl8wSSEP5hDIn0',
+  port: 28735,
 });
 
+// psql -h pg-2d98c6c2-aib-5b6c.j.aivencloud.com -p 28735 -d defaultdb -U avnadmin -W
+// CREATE TABLE users_telefit (   id SERIAL PRIMARY KEY,  email TEXT NOT NULL UNIQUE,  password TEXT NOT NULL,  username TEXT NOT NULL,  full_name TEXT NOT NULL, address TEXT NOT NULL, city TEXT NOT NULL,  about_me TEXT ,   created_at TIMESTAMP DEFAULT current_timestamp, updated_at TIMESTAMP DEFAULT current_timestamp);
+// CREATE TABLE gympartners_telefit (   id SERIAL PRIMARY KEY,  email TEXT NOT NULL UNIQUE,  password TEXT NOT NULL,  username TEXT NOT NULL,  full_name TEXT NOT NULL, address TEXT NOT NULL, city TEXT NOT NULL,  about_me TEXT ,   created_at TIMESTAMP DEFAULT current_timestamp, updated_at TIMESTAMP DEFAULT current_timestamp);
+// CREATE TABLE gyms_telefit ( id SERIAL PRIMARY KEY,  name TEXT NOT NULL UNIQUE,  city TEXT NOT NULL UNIQUE , description TEXT NOT NULL UNIQUE,  capacity TEXT NOT NULL UNIQUE,  amenities TEXT NOT NULL UNIQUE ,  address TEXT NOT NULL UNIQUE, fee TEXT NOT NULL UNIQUE, operating_hours TEXT NOT NULL UNIQUE, instructor_id  TEXT NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT current_timestamp, updated_at TIMESTAMP DEFAULT current_timestamp);
 // Student queries
 const createStudent = async (student) => {
   const query = `
@@ -48,6 +52,17 @@ const getAllGyms = async () => {
   const query = 'SELECT * FROM gyms';
   return (await pool.query(query)).rows;
 };
+
+
+
+const checkLogin = async (login_params) => {
+  const query = 'SELECT id FROM users WHERE username = $1 AND password = crypt( $2, password);';  
+  const values = [ login_params.username, login_params.password ]
+  return (await pool.query(query, values)).rows;
+};
+
+
+
 
 module.exports = {
   createStudent,
