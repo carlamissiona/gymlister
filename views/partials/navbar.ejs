@@ -1,0 +1,14 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">Gym Connection</a>
+    <div class="navbar-nav ms-auto">
+      <% if (typeof user !== 'undefined' && user) { %>
+        <span class="nav-item nav-link text-light">Hello, <%= user.fullName %></span>
+        <a class="nav-item nav-link" href="/gyms">Gyms</a>
+        <a class="nav-item nav-link" href="/auth/logout">Logout</a>
+      <% } else { %>
+        <a class="nav-item nav-link" href="/auth/login">Login</a>
+      <% } %>
+    </div>
+  </div>
+</nav>
