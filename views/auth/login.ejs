@@ -6,7 +6,7 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  
+  <% if (user_session) { user = null; user_session = null;  } %>
   <div class="container mt-4">
     <div class="row justify-content-center">
       <div class="col-md-6">

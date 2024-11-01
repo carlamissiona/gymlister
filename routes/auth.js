@@ -10,7 +10,7 @@ let user_session = null;
 
 
 router.get('/login', (req, res) => {
-  res.render('auth/login');
+  res.render('auth/login', { user : null, user_session: null });
 });
 
 router.post('/login', async (req, res) => {
@@ -30,13 +30,14 @@ router.post('/login', async (req, res) => {
       }
       
       setTimeout(function(){ 
-        
-        if (user_session) {
+        // we use set time out method bec of the await delay 
+        if (user_session.length) { 
+          console.log(user_session.length);
           user = user_session; 
-          req.session.user = user; console.log("should redirect");
+          req.session.user = user; console.log("should redirect++");
           res.redirect('/');
         } else {
-          res.render('auth/login', { error: 'Invalid credentials' });
+          res.render('auth/login', { error: 'Invalid credentials' , user: null, user_session: null });
         }
 
       }, 1700);
